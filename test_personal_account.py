@@ -6,41 +6,10 @@ from locators import MainPageLocators, LoginPageLocators, RegistrationPageLocato
 
 class TestPersonalAccount:
     
-    @pytest.fixture(autouse=True)
-    def login_user(self, driver, registration_data):
-        """Фикстура для авторизации пользователя"""
-        # Регистрация
-        WebDriverWait(driver, 5).until(
-            EC.element_to_be_clickable(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
-        ).click()
-        
-        WebDriverWait(driver, 5).until(
-            EC.element_to_be_clickable(LoginPageLocators.REGISTER_LINK)
-        ).click()
-        
-        WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located(RegistrationPageLocators.NAME_INPUT)
-        ).send_keys(registration_data["name"])
-        
-        driver.find_element(*RegistrationPageLocators.EMAIL_INPUT).send_keys(registration_data["email"])
-        driver.find_element(*RegistrationPageLocators.PASSWORD_INPUT).send_keys(registration_data["password"])
-        driver.find_element(*RegistrationPageLocators.REGISTER_BUTTON).click()
-        
-        # Вход
-        WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located(LoginPageLocators.EMAIL_INPUT)
-        ).send_keys(registration_data["email"])
-        
-        driver.find_element(*LoginPageLocators.PASSWORD_INPUT).send_keys(registration_data["password"])
-        driver.find_element(*LoginPageLocators.LOGIN_BUTTON).click()
-        
-        # Ждем успешного входа
-        WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located(CommonLocators.PLACE_ORDER_BUTTON)
-        )
-    
-    def test_go_to_personal_account(self, driver):
+    def test_go_to_personal_account(self, authenticated_driver):  # ИСПОЛЬЗОВАТЬ authenticated_driver
         """Тест перехода в личный кабинет по клику на 'Личный кабинет'"""
+        driver = authenticated_driver  # Уже авторизован и на главной
+        
         # Нажимаем на "Личный кабинет"
         WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
@@ -53,8 +22,10 @@ class TestPersonalAccount:
         
         assert driver.find_element(*AccountPageLocators.ORDER_HISTORY).is_displayed()
     
-    def test_go_from_account_to_constructor_by_button(self, driver):
+    def test_go_from_account_to_constructor_by_button(self, authenticated_driver):
         """Тест перехода из личного кабинета в конструктор по клику на 'Конструктор'"""
+        driver = authenticated_driver
+        
         # Переходим в личный кабинет
         WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
@@ -77,8 +48,10 @@ class TestPersonalAccount:
         
         assert driver.find_element(*CommonLocators.PLACE_ORDER_BUTTON).is_displayed()
     
-    def test_go_from_account_to_constructor_by_logo(self, driver):
+    def test_go_from_account_to_constructor_by_logo(self, authenticated_driver):
         """Тест перехода из личного кабинета в конструктор по клику на логотип Stellar Burgers"""
+        driver = authenticated_driver
+        
         # Переходим в личный кабинет
         WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
@@ -101,8 +74,10 @@ class TestPersonalAccount:
         
         assert driver.find_element(*CommonLocators.PLACE_ORDER_BUTTON).is_displayed()
     
-    def test_logout_from_account(self, driver):
+    def test_logout_from_account(self, authenticated_driver):
         """Тест выхода из аккаунта по кнопке 'Выйти' в личном кабинете"""
+        driver = authenticated_driver
+        
         # Переходим в личный кабинет
         WebDriverWait(driver, 5).until(
             EC.element_to_be_clickable(MainPageLocators.PERSONAL_ACCOUNT_BUTTON)
