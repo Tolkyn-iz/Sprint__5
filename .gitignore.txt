@@ -1,0 +1,31 @@
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Selenium
+geckodriver.log
+chromedriver.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
